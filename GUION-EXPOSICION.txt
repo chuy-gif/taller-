@@ -1,0 +1,353 @@
+GUION DE EXPOSICIÓN
+NEXO PARA DULCE RINCÓN - ACTIVIDADES 10 Y 11
+Duración aproximada: 10 a 12 minutos, según el tiempo de la demostración.
+
+Las indicaciones entre corchetes son acciones para quien expone; no se leen.
+El texto se puede repartir entre dos integrantes al terminar cada apartado.
+
+ACLARACIÓN ANTES DE PRESENTAR
+La versión Laravel YA tiene una base de datos funcional: SQLite.
+La conexión a un servidor PostgreSQL todavía no se ha probado ni implementado
+como configuración activa de esta entrega. Si PostgreSQL es obligatorio en la
+rúbrica, ese requisito sigue pendiente.
+Antes de exponer, verificar que esta versión esté subida a la rama que se compartirá
+con el profesor. El estado de GitHub debe confirmarse en el repositorio.
+El enlace de internet de la primera maqueta es una versión diferente: no ejecuta
+el backend Laravel de esta entrega.
+
+PREPARACIÓN
+- Extraer el paquete Nexo-CRM-Windows.zip.
+- Ejecutar INICIAR-NEXO.cmd y mantener abierta la ventana del servidor.
+- Abrir http://127.0.0.1:8000 en el navegador.
+- Tener a la mano el código fuente y este guion.
+- Usar datos ficticios durante la demostración.
+- Cuenta de administración: ana@dulcerincon.demo
+- Contraseña de las cuentas de ejemplo: NexoDemo2026!
+- Cocina: sofia@dulcerincon.demo. Consulta: elena@dulcerincon.demo.
+
+======================================================================
+1. PRESENTACIÓN DEL PROYECTO
+======================================================================
+[MOSTRAR: pantalla de login.]
+
+"Buenos días. Vamos a presentar Nexo, un CRM pensado para la pastelería
+Dulce Rincón.
+
+El problema que busca resolver es la dispersión de información: un pedido puede
+estar en WhatsApp, los datos del cliente en una libreta y las indicaciones del
+pastel en otro lugar. Esto dificulta dar seguimiento y coordinar a mostrador
+con cocina.
+
+Nexo reúne esa información en un mismo sistema. Este avance corresponde a las
+actividades 10 y 11: usuarios, clientes, seguridad básica, contactos, seguimiento
+de ventas y registro de actividades."
+
+======================================================================
+2. QUÉ CAMBIÓ RESPECTO AL PRIMER AVANCE
+======================================================================
+[MOSTRAR: carpeta del proyecto y después volver al login.]
+
+"El primer avance era una maqueta navegable en HTML, CSS y JavaScript. Permitía
+revisar el diseño, pero el acceso era simulado y los ejemplos se guardaban en el
+navegador.
+
+La versión actual incorpora PHP y Laravel para procesar las operaciones en el
+servidor, además de una base SQL real con SQLite. Ahora el registro, el login y
+la captura de información tienen persistencia en la base de datos.
+
+También se reorganizó el código por módulos y se formatearon los estilos para
+que las reglas se puedan leer por separado. Las guías están en archivos de
+texto comunes."
+
+======================================================================
+3. ACTIVIDAD 10: REGISTRO, LOGIN Y USUARIOS
+======================================================================
+[MOSTRAR: enlace Crear cuenta y sus campos. Volver al login sin registrarse
+si se quiere conservar la demostración en el negocio Dulce Rincón.]
+
+"El registro solicita nombre, negocio, correo y contraseña con confirmación.
+Se comprueba que el correo no esté repetido y que la contraseña tenga al menos
+diez caracteres, incluyendo letras y números.
+
+Una cuenta creada desde esta pantalla abre su propio espacio de trabajo.
+Para incorporar una persona a Dulce Rincón, la administradora la registra desde
+Mi equipo. Así no se permite que un registro público elija libremente entrar
+a un negocio existente."
+
+[ENTRAR como Ana. MOSTRAR Mi equipo y volver al dashboard.]
+
+"El login comprueba las credenciales y crea una sesión. Se manejan cuatro roles:
+administración, mostrador, cocina y consulta.
+
+Administración gestiona el negocio y los integrantes. Mostrador captura clientes
+y pedidos. Cocina consulta los pedidos que tiene asignados y registra avances.
+El rol de consulta puede revisar la información sin capturar cambios."
+
+======================================================================
+4. DASHBOARD Y MÓDULOS DE GESTIÓN
+======================================================================
+[MOSTRAR: indicadores, accesos a módulos y pendientes.]
+
+"Después del acceso aparece el dashboard, que concentra las entregas del día,
+las cotizaciones que necesitan seguimiento, el monto de pedidos confirmados y
+los clientes activos.
+
+Los indicadores se calculan a partir de los registros de la base. El monto en
+pedidos no representa dinero cobrado: suma las ventas abiertas que están en
+Pedido o Entrega.
+
+Desde aquí se entra a Clientes, Contactos, Ventas y pedidos, y Actividades.
+También se muestran pendientes y un resumen del embudo. El objetivo es que la
+dueña identifique qué debe atender sin buscar entre conversaciones."
+
+======================================================================
+5. ACTIVIDAD 10: GESTIÓN DE CLIENTES
+======================================================================
+[ABRIR Clientes > Nuevo cliente. Crear "Familia Pérez", canal WhatsApp,
+correo familia.perez@example.com y una indicación ficticia para cocina.]
+
+"En Clientes se registra la información del comprador: nombre, canal de contacto,
+correo, teléfono e indicaciones, como alergias o notas importantes.
+
+El módulo permite registrar, buscar, consultar y editar. También se puede
+archivar y reactivar un cliente. Archivar cambia su estado y conserva su
+historial; no elimina las ventas que ya tenía relacionadas."
+
+[GUARDAR y MOSTRAR la ficha del cliente.]
+
+"Esta ficha reúne los datos del cliente, sus personas de contacto, sus ventas
+y las actividades registradas. Mostrador y cocina pueden consultar información
+consistente según sus permisos."
+
+======================================================================
+6. ACTIVIDAD 11: GESTIÓN DE CONTACTOS
+======================================================================
+[ABRIR Contactos > Nuevo contacto. Elegir Familia Pérez. Registrar
+"Laura Pérez", relación "Contacto del evento" y laura.perez@example.com.
+Marcarla como contacto principal y guardar.]
+
+"Cliente y contacto representan cosas distintas. El cliente es quien compra,
+por ejemplo una familia o una empresa. El contacto es la persona con la que
+hablamos para organizar el pedido.
+
+Un cliente puede tener varios contactos. Se guarda el nombre de la persona,
+su relación o cargo, sus medios de contacto y si es el contacto principal.
+
+Esto ayuda, por ejemplo, cuando una empresa tiene una persona de compras y otra
+responsable del evento. Si se retira un contacto de la agenda, se usa un borrado
+lógico: deja de aparecer en la lista, pero su registro permanece en la base."
+
+======================================================================
+7. ACTIVIDAD 11: SEGUIMIENTO DE VENTAS Y PEDIDOS
+======================================================================
+[ABRIR Ventas y pedidos > Nueva venta. Elegir Familia Pérez.
+Ejemplo: pastel de vainilla, cumpleaños, 20 porciones, monto 900,
+anticipo 200, fecha de entrega de hoy y hora 16:00.
+Asignar a Sofía como responsable de cocina. Guardar.]
+
+"El pedido de la pastelería se administra como una oportunidad de venta.
+Se registra el cliente, producto, evento, porciones, monto, anticipo y entrega.
+También se puede asignar un responsable de cocina.
+
+La venta comienza en Consulta y puede pasar por Cotización, Pedido y Entrega.
+Este embudo permite ver en qué punto está cada oportunidad."
+
+[ABRIR la ficha. Cambiar a Cotización y después a Pedido, guardando cada cambio.
+MOSTRAR el historial.]
+
+"Cada cambio de etapa queda registrado en el historial. Así se puede consultar
+qué ocurrió con el pedido.
+
+El servidor también valida reglas del negocio. Por ejemplo, no acepta un
+anticipo mayor que el monto total.
+
+La venta puede cerrarse como ganada o entregada, o como perdida indicando el
+motivo. Para confirmar una entrega, primero debe estar en la etapa Entrega.
+Una vez cerrada, sus datos y etapas ya no se pueden editar desde este módulo.
+El cierre no procesa automáticamente el cobro del saldo."
+
+======================================================================
+8. ACTIVIDAD 11: REGISTRO DE ACTIVIDADES
+======================================================================
+[DESDE la venta, abrir Seguimiento. Registrar una llamada con el asunto
+"Confirmar diseño", una descripción breve y marcarla como realizada.]
+
+"Las actividades registran la relación con el cliente: llamadas, correos,
+notas, pruebas de sabor, avances de cocina y tareas.
+
+Cada actividad guarda asunto, descripción, autor y fecha. Puede relacionarse
+con una venta del mismo cliente. El sistema comprueba esa relación antes de
+guardarla."
+
+[CREAR una segunda actividad como tarea para mañana, sin marcarla completada.
+ABRIR Actividades y filtrar Pendientes.]
+
+"También se pueden programar actividades y marcarlas como completadas después.
+Programar una tarea futura no significa que ya se habló con el cliente.
+Por eso se distingue entre lo pendiente y lo realizado.
+
+Estas actividades aparecen en la lista general y en los historiales relacionados,
+para que el seguimiento quede dentro del CRM."
+
+======================================================================
+9. SEGURIDAD BÁSICA
+======================================================================
+[MOSTRAR brevemente un formulario o la pantalla Mi equipo.
+Si hay tiempo: cerrar sesión y entrar como Cocina para comparar permisos.]
+
+"La seguridad se aplica en el servidor, además de lo que se muestra en pantalla.
+No basta con ocultar un botón: Laravel vuelve a comprobar el usuario y el rol
+antes de permitir una operación.
+
+Las contraseñas se guardan como hash, no como texto legible. Hay validación de
+formularios, protección CSRF y un límite de intentos de acceso.
+
+Las rutas del CRM exigen una sesión y una cuenta activa. Al cerrar sesión se
+invalida ese acceso. Además, las consultas filtran por el negocio de la cuenta,
+y cocina solo puede consultar las ventas que tiene asignadas."
+
+======================================================================
+10. ORGANIZACIÓN DEL CÓDIGO
+======================================================================
+[MOSTRAR routes/web.php y ClienteController.php. Luego abrir el formulario
+de clientes y public/css/estilos.css.]
+
+"El proyecto sigue la organización de Laravel.
+
+Las rutas relacionan una dirección con una acción. Los controladores reciben
+los formularios, comprueban permisos y validan datos. Los modelos representan
+las entidades de la base. Las vistas Blade contienen el HTML de las pantallas.
+
+Por ejemplo, guardar un cliente envía el formulario a una ruta. Esa ruta llama
+al controlador de clientes, que valida la información y utiliza el modelo para
+guardarla. Después muestra la ficha del registro.
+
+El CSS controla la apariencia. JavaScript se usa para detalles visuales, como
+abrir el menú o mostrar la contraseña; no decide los permisos de seguridad.
+Las migraciones describen cómo crear las tablas y los seeders cargan ejemplos
+para practicar."
+
+======================================================================
+11. BASE DE DATOS, PRUEBAS Y PENDIENTES
+======================================================================
+[MOSTRAR la carpeta database o la guía de base de datos.]
+
+"La aplicación ya tiene una base de datos funcional en SQLite, guardada en un
+archivo local. Los registros se conservan al cerrar el navegador y reiniciar
+el servidor; no dependen del almacenamiento del navegador.
+
+La propuesta inicial contemplaba PostgreSQL. Se dejó un ejemplo de configuración
+y las migraciones para preparar esa integración, pero todavía falta conectarse
+a una instancia real de PostgreSQL y probar las operaciones allí.
+
+También se ejecutaron 18 pruebas automatizadas con 122 comprobaciones. Cubren
+registro, login, clientes, contactos, ventas, actividades, indicadores y permisos,
+incluyendo intentos de consultar datos de otro negocio y peticiones sin CSRF."
+
+[PARA GITHUB: actualizar este párrafo antes de exponer según el estado real.]
+
+"El código fuente está organizado para compartirse en GitHub. Git permite
+registrar los cambios y revisar el trabajo del proyecto por versiones.
+No se incluye en Git el archivo de base de datos de cada computadora, las
+sesiones ni el archivo de configuración privada. Las tablas se recrean con
+las migraciones."
+
+"Para utilizar la aplicación por internet haría falta alojar esta versión
+Laravel en un servidor compatible con PHP y configurar HTTPS y respaldos.
+Por ahora se ejecuta localmente para demostrar el funcionamiento."
+
+======================================================================
+12. CIERRE
+======================================================================
+[VOLVER al dashboard de administración.]
+
+"En este avance Nexo pasó de una maqueta visual a una aplicación local con
+usuarios, clientes, contactos, ventas y actividades guardados en una base real.
+Los módulos están reunidos en el dashboard y tienen permisos según el rol.
+
+La siguiente etapa es completar y verificar la configuración con PostgreSQL,
+si es el motor requerido, y mantener actualizada la entrega en el repositorio del equipo.
+Con esto podemos demostrar el flujo completo de una venta y su seguimiento."
+
+======================================================================
+PREGUNTAS QUE PODRÍA HACER EL PROFESOR
+======================================================================
+
+¿Ya tiene base de datos?
+Sí. Esta versión usa SQLite y guarda datos SQL reales en database/database.sqlite.
+El archivo se crea al preparar la aplicación; la primera ejecución instala las
+tablas y puede cargar los ejemplos.
+
+¿Entonces qué falta de PostgreSQL?
+Configurar una base PostgreSQL real, conectar las credenciales locales y ejecutar
+y verificar las migraciones y operaciones. Todavía no se ha probado ese motor.
+Cambiar la configuración no copia por sí solo los datos que existan en SQLite.
+
+¿Cuál es la diferencia entre SQL, SQLite y PostgreSQL?
+SQL es el lenguaje para trabajar con datos. SQLite y PostgreSQL son motores de
+base de datos. En esta entrega está funcionando SQLite; PostgreSQL era el motor
+contemplado para la integración siguiente.
+
+¿El sitio de internet y esta aplicación son lo mismo?
+No. El enlace de la primera entrega contiene la maqueta visual. La versión
+Laravel se inicia con el paquete de Windows y funciona en el servidor local.
+
+¿Qué significa localhost o 127.0.0.1?
+Es la dirección de esta misma computadora. El navegador se comunica con el
+servidor PHP que está corriendo aquí. No significa que la aplicación ya esté
+publicada para otras computadoras.
+
+¿Se pierden los datos si cierro el navegador?
+No. Están en la base local. Para volver a consultar la aplicación, el servidor
+debe estar encendido y utilizarse la misma base. Borrar el archivo de la base
+sí elimina esos datos locales.
+
+¿Por qué Laravel?
+Porque proporciona una estructura para las rutas, modelos, vistas, validación,
+sesiones y acceso a la base. El código propio implementa las reglas del CRM
+apoyándose en esas herramientas del framework.
+
+¿Se guarda la contraseña tal como se escribe?
+No. Se guarda un hash y se comprueba al iniciar sesión. No se debe presentar
+el hash como si fuera una contraseña cifrada que se puede leer de regreso.
+
+¿Ocultar un botón es suficiente para proteger una acción?
+No. Los controladores y las comprobaciones de sesión vuelven a validar el rol.
+Las consultas también limitan los registros al negocio de la cuenta.
+
+¿Qué diferencia hay entre cliente, contacto, venta y actividad?
+Cliente: quien compra. Contacto: la persona con quien se habla.
+Venta: la oportunidad o pedido que se sigue en el embudo.
+Actividad: la llamada, nota, tarea o interacción registrada.
+
+¿Archivar un cliente borra sus pedidos?
+No. Cambia su estado y conserva el historial. Retirar una persona de contacto
+usa borrado lógico, que es una operación distinta de borrar definitivamente.
+
+¿El monto en pedidos es dinero cobrado?
+No. Es el monto de ventas abiertas en Pedido y Entrega. El anticipo se registra
+por separado y el cierre de la venta no realiza un cobro bancario.
+
+¿Ya está listo para usarse como sistema de producción?
+La entrega demuestra los módulos y su seguridad básica en entorno local.
+Antes de un uso real por internet faltaría desplegar Laravel, configurar HTTPS,
+respaldos y revisar los requisitos de operación. No se han implementado
+recuperación de contraseña por correo, verificación de correo ni doble factor.
+
+¿Dónde se revisa que funcionan los módulos?
+En tests/Feature/ModulosCrmTest.php. Las pruebas se ejecutan desde el proyecto
+con php vendor/bin/phpunit. El paquete Windows también incluye
+PROBAR-MODULOS.cmd. Las pruebas usan una base temporal en memoria.
+
+======================================================================
+FRASES QUE CONVIENE EVITAR PORQUE NO DESCRIBEN ESTA ENTREGA
+======================================================================
+- "Solo falta la base de datos": ya funciona SQLite.
+- "Ya está conectado a PostgreSQL": esa conexión sigue pendiente de prueba.
+- "Ya se subió al repositorio": decirlo únicamente después de verificar la subida.
+- "Ya está publicado el Laravel": el enlace anterior es otra maqueta.
+- "No se puede vulnerar": se implementaron controles básicos, no una garantía absoluta.
+
+FRASE CORTA PARA EXPLICAR EL ESTADO ACTUAL
+"El CRM ya funciona localmente con PHP, Laravel y SQLite. La siguiente etapa
+es verificar PostgreSQL y confirmar la entrega de la versión actual en GitHub."
