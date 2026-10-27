@@ -1,0 +1,74 @@
+NEXO PARA DULCE RINCÓN
+Actividades 10 y 11: módulos de usuarios, clientes y CRM.
+
+QUÉ ES ESTA VERSIÓN
+Una aplicación en PHP y Laravel con una base SQL real. Los datos ya no se
+simulan en JavaScript ni se guardan en localStorage. Se conservan al cerrar
+el navegador y reiniciar el servidor.
+
+PARA ABRIR EL PAQUETE WINDOWS
+1. Extrae TODO el ZIP de Windows a una carpeta normal. No lo ejecutes dentro del ZIP.
+2. Abre INICIAR-NEXO.cmd y deja esa ventana abierta mientras uses el CRM.
+3. Abre http://127.0.0.1:8000 en tu navegador.
+4. Para detener el servidor, presiona Ctrl+C en la ventana de inicio.
+
+El paquete incluye PHP para Windows de 64 bits y las dependencias de Laravel.
+No necesitas instalar PostgreSQL para esta demostración: SQLite guarda la base
+en el archivo Nexo-CRM/database/database.sqlite.
+Si Windows indica que falta VCRUNTIME, instala el redistribuible oficial de
+Microsoft Visual C++ 2015-2022 x64. PHP necesita ese componente del sistema.
+
+CUENTAS FICTICIAS DE LA DEMOSTRACIÓN
+Todas usan: NexoDemo2026!
+- ana@dulcerincon.demo     Administradora.
+- luis@dulcerincon.demo    Mostrador: captura y seguimiento.
+- sofia@dulcerincon.demo   Cocina: solo pedidos asignados y actividades.
+- elena@dulcerincon.demo   Consulta: lectura del dashboard y fichas.
+
+El enlace Crear cuenta registra un negocio nuevo, inicialmente vacío.
+Para incorporar a alguien al negocio actual, usa Mi equipo > Agregar integrante.
+
+QUÉ ARCHIVOS REVISAR PRIMERO
+- routes/web.php: direcciones de las pantallas y acciones.
+- app/Http/Controllers/: procesa y valida cada formulario.
+- app/Models/: representa usuarios, negocios, clientes, contactos, ventas y actividades.
+- resources/views/: HTML de las pantallas; Blade permite mostrar los datos de PHP.
+- public/css/estilos.css: colores y acomodo, con una propiedad por línea.
+- public/js/interfaz.js: solo menú, botón Mostrar y ayuda de selección.
+- database/migrations/: crea las tablas y sus relaciones.
+- database/seeders/DatabaseSeeder.php: datos ficticios de la demostración.
+- tests/Feature/ModulosCrmTest.php: pruebas de funcionamiento y permisos.
+
+Para encontrar una funcionalidad, abre el controlador con el mismo nombre:
+ClienteController, ContactoController, VentaController o ActividadController.
+
+PARA GITHUB
+La copia CODIGO-PARA-GITHUB contiene el código fuente sin la base local,
+contraseñas reales, sesiones, PHP portable ni la carpeta vendor.
+Sube esa copia al repositorio. Revisa documentacion/04-GITHUB.txt.
+
+Las guías son archivos de texto comunes (.txt). No necesitas aprender Markdown
+para leerlas. composer.json y composer.lock son archivos de dependencias de
+Laravel: Composer los utiliza y no hace falta escribirlos a mano.
+
+INSTALAR DESDE EL CÓDIGO FUENTE
+Requiere PHP 8.4 o superior y Composer. Probado con PHP 8.5.12.
+Desde la carpeta del proyecto ejecuta, en este orden:
+  composer install
+  php scripts/preparar.php
+  php artisan migrate
+  php artisan db:seed
+  php artisan serve --host=127.0.0.1 --port=8000
+
+El seeder es opcional y solo se permite en entorno local o de pruebas.
+No elimina datos existentes ni modifica las contraseñas de cuentas ya creadas.
+Para ejecutar las pruebas después de composer install:
+  php vendor/bin/phpunit
+
+ALCANCE
+Incluye seguridad básica de aplicación. No implementa recuperación por correo,
+verificación de correo ni doble factor. El servidor de desarrollo escucha solo
+en esta computadora. Para usarlo con clientes reales haría falta desplegarlo en
+un alojamiento compatible con PHP, configurar HTTPS y copias de seguridad.
+El enlace privado del prototipo anterior sigue siendo una maqueta separada;
+no ejecuta este backend Laravel.

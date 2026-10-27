@@ -1,0 +1,34 @@
+CÃ“MO PREPARAR LA ENTREGA EN GITHUB
+Repositorio indicado: https://github.com/chuy-gif/taller-
+
+Usa la copia del CÃ“DIGO FUENTE, no el paquete portable completo.
+La carpeta vendor, PHP portable, bases locales y .env no deben subirse.
+.gitignore ya indica a Git quÃ© archivos locales ignorar.
+composer.json y composer.lock sÃ­ se comparten para que otro equipo pueda instalar.
+Los archivos .env.example y .env.postgresql.example son ejemplos sin credenciales reales.
+
+Si el repositorio ya contiene trabajo del equipo, consÃ©rvalo y revisa los cambios
+en una rama antes de incorporarlos a la principal. No reemplaces archivos ajenos
+sin comparar su contenido.
+
+DespuÃ©s de abrir una copia local del repositorio y colocar el proyecto donde
+corresponda, una secuencia habitual es:
+  git switch -c actividades-10-11
+  git status
+  git add .
+  git diff --cached
+  git commit -m "Integrar modulos de usuarios, clientes y CRM"
+  git push -u origin actividades-10-11
+
+Revisa que no se incluyan .env, *.sqlite, sesiones o datos personales.
+Luego crea un Pull Request hacia la rama principal para que el equipo lo revise.
+
+QUÃ‰ PUEDE REVISAR EL PROFESOR
+- LEEME-PRIMERO.txt: cÃ³mo ejecutar y quÃ© incluye.
+- documentacion/01-ACTIVIDADES-10-Y-11.txt: relaciÃ³n con los requisitos.
+- app/Http/Controllers/: registro, permisos y operaciones de cada mÃ³dulo.
+- database/migrations/: estructura SQL y relaciones.
+- resources/views/: pantallas separadas y formularios legibles.
+- tests/Feature/ModulosCrmTest.php: casos de funcionamiento y seguridad.
+
+Para ejecutar despuÃ©s de clonar: consulta LEEME-PRIMERO.txt.

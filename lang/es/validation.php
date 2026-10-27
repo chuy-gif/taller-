@@ -1,0 +1,30 @@
+<?php
+
+return [
+    'required' => 'El campo :attribute es obligatorio.',
+    'required_if' => 'El campo :attribute es obligatorio para este resultado.',
+    'required_without' => 'Registra :attribute o el otro medio de contacto.',
+    'email' => 'El campo :attribute debe ser un correo válido.',
+    'unique' => 'Este :attribute ya está registrado.',
+    'confirmed' => 'La confirmación de :attribute no coincide.',
+    'string' => 'El campo :attribute debe ser texto.',
+    'integer' => 'El campo :attribute debe ser un número entero.',
+    'numeric' => 'El campo :attribute debe ser un número.',
+    'boolean' => 'El valor de :attribute no es válido.',
+    'in' => 'El valor de :attribute no está permitido.',
+    'exists' => 'La opción seleccionada en :attribute no está disponible.',
+    'date_format' => 'El campo :attribute debe tener el formato :format.',
+    'decimal' => 'El campo :attribute admite hasta dos decimales.',
+    'regex' => 'El formato de :attribute no es válido.',
+    'min' => ['string' => ':attribute necesita al menos :min caracteres.', 'numeric' => ':attribute no puede ser menor a :min.'],
+    'max' => ['string' => ':attribute no puede superar :max caracteres.', 'numeric' => ':attribute no puede superar :max.'],
+    'lte' => ['numeric' => 'El anticipo no puede ser mayor al monto de la venta.'],
+    'password' => ['letters' => 'La contraseña debe contener letras.', 'numbers' => 'La contraseña debe contener números.'],
+    'attributes' => [
+        'name' => 'nombre', 'email' => 'correo', 'password' => 'contraseña',
+        'cliente_id' => 'cliente', 'venta_id' => 'venta', 'cocina_id' => 'responsable de cocina',
+        'fecha_entrega' => 'fecha de entrega', 'hora_entrega' => 'hora de entrega',
+        'programada_para' => 'fecha programada', 'motivo_perdida' => 'motivo de pérdida',
+        'descripcion' => 'descripción', 'telefono' => 'teléfono',
+    ],
+];

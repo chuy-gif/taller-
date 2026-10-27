@@ -1,0 +1,27 @@
+# Dependencias: se instalan con Composer y no forman parte de nuestro código.
+/vendor/
+/node_modules/
+
+# Configuración privada y base de datos de cada computadora.
+.env
+.env.backup
+.env.production
+/database/*.sqlite
+/database/*.sqlite-*
+/auth.json
+
+# Archivos temporales y de la sesión.
+/bootstrap/cache/*.php
+/storage/**/*.log
+/storage/framework/sessions/*
+/storage/framework/views/*.php
+/storage/framework/cache/data/*
+/.phpunit.cache/
+/.phpunit.result.cache
+/.idea/
+/.vscode/
+/.runtime/
+/herramientas/
+
+# Se conservan los archivos vacíos que mantienen las carpetas necesarias.
+!.gitignore

@@ -1,0 +1,67 @@
+ACTIVIDAD 10: DESARROLLO DEL MÓDULO DE USUARIOS Y CLIENTES
+Fecha indicada en la actividad: 28 de septiembre.
+
+1. Registro y login
+   Pantallas: /registro y /login.
+   Archivo principal: app/Http/Controllers/AccesoController.php.
+   La cuenta nueva crea un espacio de negocio propio.
+   Se valida el correo único y la confirmación de la contraseña.
+   Solo se guarda el hash de la contraseña. El acceso crea una sesión real.
+
+2. Gestión de clientes
+   Pantallas: /clientes, alta, edición y ficha.
+   Archivo principal: app/Http/Controllers/ClienteController.php.
+   Se puede registrar, buscar, consultar, editar, archivar y reactivar.
+   Archivar conserva las ventas, contactos y actividades anteriores.
+
+3. Seguridad básica
+   Sesiones, cierre de sesión, contraseñas con hash, validación en PHP,
+   protección CSRF, límite de intentos y permisos según rol.
+   Cada consulta limita los registros al negocio de la sesión.
+   Los usuarios desactivados no pueden continuar usando el dashboard.
+
+ACTIVIDAD 11: DESARROLLO DE FUNCIONALIDADES DEL CRM
+Fecha indicada en la actividad: 12 de octubre.
+
+1. Gestión de contactos
+   Pantalla: /contactos.
+   Archivo principal: ContactoController.php.
+   Un cliente puede tener varias personas de contacto.
+   Se registra nombre, cargo o relación, correo, teléfono y contacto principal.
+   Se puede buscar, editar y retirar un contacto de la agenda.
+   Retirar usa borrado lógico; la fila se conserva en la base de datos.
+
+2. Seguimiento de ventas
+   Pantalla: /ventas.
+   Archivo principal: VentaController.php.
+   El pedido se organiza como una oportunidad en cuatro etapas:
+   Consulta, Cotización, Pedido y Entrega.
+   Permite editar producto, monto, anticipo, fecha y responsable de cocina.
+   Cada cambio de etapa queda en el historial.
+   Una venta puede cerrarse como ganada/entregada o perdida con motivo.
+   Una venta cerrada ya no permite editar sus datos ni cambiar su etapa.
+   El cierre no significa que se haya cobrado automáticamente el saldo.
+
+3. Registro de actividades
+   Pantalla: /actividades.
+   Archivo principal: ActividadController.php.
+   Tipos: Nota, Llamada, Correo, Prueba de sabor, Cocina y Tarea.
+   Pueden relacionarse con un cliente y, opcionalmente, una venta del mismo cliente.
+   Se registra asunto, descripción, fecha programada y estado de cumplimiento.
+   Una tarea futura no cuenta como una conversación ya realizada.
+
+MÓDULOS DE GESTIÓN DENTRO DEL DASHBOARD
+El tablero incluye accesos a Clientes, Contactos, Ventas y pedidos, y Actividades.
+Muestra entregas del día, cotizaciones frías, monto de pedidos y clientes activos.
+También presenta las actividades pendientes y el resumen del embudo.
+Mi equipo aparece solamente para la administradora.
+
+RECORRIDO SUGERIDO PARA REVISAR EL FUNCIONAMIENTO
+1. Entra como Ana y abre el dashboard.
+2. Crea un cliente y una persona de contacto de ese cliente.
+3. Registra una venta con anticipo menor que el monto.
+4. Abre la venta, cambia la etapa y registra una llamada completada.
+5. Programa una tarea y márcala después como completada.
+6. Consulta el historial de la venta y la ficha del cliente.
+7. Cierra sesión y entra como Cocina para comparar los permisos.
+8. Reinicia el servidor: los registros siguen guardados en la base local.
