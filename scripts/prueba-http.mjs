@@ -33,11 +33,11 @@ function cookieDeSesion(cookies) {
 async function iniciarSesion(origen, espera) {
     const cookies = new Map();
     const entrada = await fetch(`${origen}/login`, { redirect: 'manual', signal: AbortSignal.timeout(espera) });
-    if (entrada.status !== 200) throw new Error(`GET /login devolvió HTTP ${entrada.status}.`);
+    if (entrada.status !== 200) throw new Error(`GET /login: HTTP ${entrada.status}.`);
     guardarCookies(cookies, entrada);
     const html = await entrada.text();
     const token = html.match(/name="_token"\s+value="([^"]+)"/)?.[1];
-    if (!token) throw new Error('No se encontró el token CSRF en el formulario de Nexo.');
+    if (!token) throw new Error('Falta el token CSRF en el formulario de Nexo.');
 
     const autenticacion = await fetch(`${origen}/login`, {
         method: 'POST', redirect: 'manual', signal: AbortSignal.timeout(espera),
@@ -52,7 +52,7 @@ async function iniciarSesion(origen, espera) {
     const destino = autenticacion.headers.get('location');
     await autenticacion.arrayBuffer();
     if (autenticacion.status !== 302 || !destino || new URL(destino, origen).pathname !== '/dashboard') {
-        throw new Error(`El inicio de sesión devolvió HTTP ${autenticacion.status}. Revisa la cuenta de demostración y la configuración de sesiones.`);
+        throw new Error(`Inicio de sesion: HTTP ${autenticacion.status}. Revisa la cuenta demo y las sesiones.`);
     }
     return cookieDeSesion(cookies);
 }
@@ -96,7 +96,7 @@ async function ejecutarNivel(origen, rutas, cookie, espera, simultaneas, total) 
 function resumir(ruta, resultados) {
     const tiempos = resultados.filter(r => !r.error).map(r => r.tiempo).sort((a, b) => a - b);
     function percentil(p) {
-        if (!tiempos.length) return '—';
+        if (!tiempos.length) return '-';
         const posicion = (tiempos.length - 1) * p;
         const inferior = Math.floor(posicion);
         const superior = Math.ceil(posicion);
@@ -104,8 +104,21 @@ function resumir(ruta, resultados) {
     }
     return {
         Ruta: ruta, Peticiones: resultados.length, OK: tiempos.length, Errores: resultados.length - tiempos.length,
-        'p50 ms': percentil(0.5), 'p95 ms': percentil(0.95), 'Máx. ms': percentil(1),
+        'p50 ms': percentil(0.5), 'p95 ms': percentil(0.95), 'Max ms': percentil(1),
     };
+}
+
+function imprimirTabla(filas) {
+    const encabezados = Object.keys(filas[0]);
+    const anchos = encabezados.map(columna =>
+        Math.max(columna.length, ...filas.map(fila => String(fila[columna]).length)),
+    );
+    const formatear = valores => valores.map((valor, indice) =>
+        String(valor).padEnd(anchos[indice]),
+    ).join(' | ').trimEnd();
+
+    console.log(formatear(encabezados));
+    for (const fila of filas) console.log(formatear(encabezados.map(columna => fila[columna])));
 }
 
 async function main() {
@@ -128,10 +141,10 @@ async function main() {
     if (total < rutas.length) throw new Error('Indica al menos una petición por ruta en cada nivel.');
 
     const origen = `http://127.0.0.1:${puerto}`;
-    console.log(`Nexo CRM · Prueba HTTP en ${origen}`);
-    console.log(`${total} peticiones por nivel · Una sesión autenticada · ${espera} ms de espera máxima`);
+    console.log(`Nexo CRM | Prueba HTTP en ${origen}`);
+    console.log(`${total} peticiones por nivel | Una sesion autenticada | Tiempo limite ${espera} ms`);
     const cookie = await iniciarSesion(origen, espera);
-    console.log(`Sesión iniciada. Rutas: ${rutas.join(', ')}`);
+    console.log(`Sesion iniciada. Rutas: ${rutas.join(', ')}`);
     for (const ruta of rutas) await medir(origen, ruta, cookie, espera);
 
     let fallidas = 0;
@@ -143,14 +156,14 @@ async function main() {
         filas.push(resumir('TOTAL', resultados));
 
         console.log(`\nNivel ${nivel} | Hasta ${Math.min(nivel, total)} en paralelo | ${segundos.toFixed(2)} s | ${((total - errores.length) / segundos).toFixed(1)} respuestas correctas/s`);
-        console.table(filas);
+        imprimirTabla(filas);
         if (errores.length) {
             const porMotivo = new Map();
             for (const { ruta, error } of errores) {
                 const motivo = `${ruta}: ${error}`;
                 porMotivo.set(motivo, (porMotivo.get(motivo) ?? 0) + 1);
             }
-            for (const [motivo, cantidad] of porMotivo) console.log(`  ${cantidad} × ${motivo}`);
+            for (const [motivo, cantidad] of porMotivo) console.log(`  ${cantidad} x ${motivo}`);
         }
     }
 
@@ -161,8 +174,8 @@ async function main() {
 main().catch(error => {
     const codigo = error.cause?.code;
     const mensajes = {
-        ECONNREFUSED: 'Conexión rechazada. Confirma que Nexo está encendido y que el puerto coincide.',
-        EACCES: 'El entorno bloqueó la conexión al servidor local. Ejecuta la prueba desde tu PowerShell.',
+        ECONNREFUSED: 'No hay acceso a Nexo. Confirma que el servidor y el puerto son correctos.',
+        EACCES: 'Tu entorno impide el acceso al servidor local. Ejecuta la prueba desde tu PowerShell.',
     };
     console.error(`Prueba HTTP: ${mensajes[codigo] ?? codigo ?? error.message}`);
     process.exitCode = 1;
