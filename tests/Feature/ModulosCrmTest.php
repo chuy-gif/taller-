@@ -180,6 +180,25 @@ class ModulosCrmTest extends TestCase
         $this->patch('/ventas/'.$venta->id.'/etapa', ['etapa' => 'consulta'])->assertForbidden();
     }
 
+    public function test_venta_abierta_se_edita_sin_cambiar_su_cliente_archivado(): void
+    {
+        $this->actingAs($this->usuario('editor'));
+        $venta = Venta::firstOrFail();
+        $clienteOriginal = $venta->cliente;
+        $clienteOriginal->update(['activo' => false]);
+        $datos = [...$this->datosVenta(), 'cliente_id' => $clienteOriginal->id];
+
+        $this->put('/ventas/'.$venta->id, $datos)->assertSessionHasNoErrors();
+        $this->assertSame('Pastel de prueba', $venta->fresh()->producto);
+        $this->assertSame($clienteOriginal->id, $venta->fresh()->cliente_id);
+        $this->post('/ventas', $datos)->assertSessionHasErrors('cliente_id');
+
+        $otroCliente = Cliente::where('id', '!=', $clienteOriginal->id)->firstOrFail();
+        $this->put('/ventas/'.$venta->id, [...$datos, 'cliente_id' => $otroCliente->id])
+            ->assertSessionHasNoErrors();
+        $this->assertSame($clienteOriginal->id, $venta->fresh()->cliente_id);
+    }
+
     public function test_cocina_solo_consulta_asignados_y_registra_seguimientos(): void
     {
         $cocina = $this->usuario('colaborador');
@@ -211,6 +230,26 @@ class ModulosCrmTest extends TestCase
         $this->patch('/actividades/'.$actividad->id.'/completar')->assertSessionHasNoErrors();
         $this->assertTrue($actividad->fresh()->completada);
         $this->assertTrue($venta->fresh()->ultima_actividad->isToday());
+    }
+
+    public function test_repetir_el_cierre_de_una_actividad_no_actualiza_la_venta(): void
+    {
+        $this->actingAs($this->usuario());
+        $venta = Venta::firstOrFail();
+        $actividad = $venta->actividades()->create([
+            'negocio_id' => $venta->negocio_id, 'cliente_id' => $venta->cliente_id,
+            'autor_id' => $this->usuario()->id, 'tipo' => 'Tarea', 'asunto' => 'Confirmar pedido',
+            'descripcion' => 'Verificar hora de entrega.', 'completada' => false,
+        ]);
+        $url = '/actividades/'.$actividad->id.'/completar';
+
+        $this->patch($url)->assertRedirect();
+        $this->assertTrue($actividad->fresh()->completada);
+        $fechaReal = $venta->fresh()->ultima_actividad->toDateTimeString();
+
+        $this->travel(8)->days();
+        $this->patch($url)->assertRedirect();
+        $this->assertSame($fechaReal, $venta->fresh()->ultima_actividad->toDateTimeString());
     }
 
     public function test_cuenta_inactiva_y_autodesactivacion_estan_bloqueadas(): void
@@ -274,5 +313,37 @@ class ModulosCrmTest extends TestCase
             ->assertViewHas('frias', fn ($lista) => $lista->count() === 2)
             ->assertViewHas('clientes', 6)
             ->assertViewHas('monto', fn ($monto) => (float) $monto === 2700.0);
+    }
+
+    public function test_dashboard_pagina_las_dos_listas_y_conserva_los_totales(): void
+    {
+        $referencia = Venta::firstOrFail();
+        $datos = [
+            ...$this->datosVenta(), 'cliente_id' => $referencia->cliente_id,
+            'negocio_id' => $referencia->negocio_id, 'responsable_id' => $this->usuario()->id,
+            'estado' => 'abierta', 'anticipo' => 0, 'ultima_actividad' => now()->subDays(8),
+        ];
+        for ($i = 1; $i <= 10; $i++) {
+            Venta::create([...$datos, 'etapa' => 'pedido', 'fecha_entrega' => today()]);
+            Venta::create([...$datos, 'etapa' => 'cotizacion']);
+        }
+
+        $this->actingAs($this->usuario())->get('/dashboard')
+            ->assertOk()->assertSee('12 entregas para hoy')->assertSee('12 cotizaciones necesitan seguimiento')
+            ->assertViewHas('entregas', fn ($lista) => $lista->count() === 10 && $lista->total() === 12)
+            ->assertViewHas('frias', fn ($lista) => $lista->count() === 10 && $lista->total() === 12);
+
+        $this->get('/dashboard?pagina_entregas=2')
+            ->assertOk()->assertSee('12 entregas para hoy')
+            ->assertViewHas('entregas', fn ($lista) => $lista->count() === 2 && $lista->currentPage() === 2)
+            ->assertViewHas('frias', fn ($lista) => $lista->count() === 10 && $lista->currentPage() === 1)
+            ->assertSee('pagina_entregas=2&amp;pagina_cotizaciones=2', false);
+    }
+
+    public function test_avisos_de_privacidad_se_consultan_antes_del_registro(): void
+    {
+        $this->get('/registro')->assertOk()->assertSee('Consulta el aviso de privacidad');
+        $this->get('/privacidad')->assertOk()->assertSee('Aviso simplificado')->assertSee('Aviso integral');
+        $this->assertGuest();
     }
 }

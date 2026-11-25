@@ -22,7 +22,7 @@
                     @include('partials.errores')
                     @yield('contenido')
                 </div>
-                <small class="texto-suave">Nexo · Proyecto académico · PHP y Laravel</small>
+                <small class="texto-suave">Nexo · Proyecto académico · <a class="enlace" href="{{ route('privacidad') }}">Aviso de privacidad</a></small>
             </section>
             <aside class="acceso-presentacion">
                 <p class="sobre-titulo">DULCE RINCÓN</p>

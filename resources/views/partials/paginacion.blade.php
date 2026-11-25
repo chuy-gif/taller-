@@ -1,5 +1,5 @@
 @if($paginator->hasPages())
-<nav class="paginacion" aria-label="Páginas de resultados">
+<nav class="paginacion" aria-label="{{ $etiqueta ?? 'Páginas de resultados' }}">
     @if($paginator->onFirstPage())
     <span>Anterior</span>
     @else

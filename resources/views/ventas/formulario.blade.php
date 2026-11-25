@@ -11,8 +11,7 @@
         <label class="completo">
             Cliente
             @if($venta->exists)
-            <input type="hidden" name="cliente_id" value="{{ $venta->cliente_id }}" />
-            <input value="{{ $venta->cliente->nombre }}" disabled />
+            <input value="{{ $venta->cliente->nombre }}" readonly />
             @else
             <select name="cliente_id" required>
                 <option value="">Selecciona un cliente activo</option>

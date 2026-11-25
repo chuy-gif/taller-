@@ -809,6 +809,17 @@ tr:last-child td {
 }
 
 /* 6. AdaptaciÃ³n a laptop, tablet y celular */
+.aviso-privacidad {
+    margin-bottom: 24px;
+}
+.aviso-privacidad h3 {
+    margin-top: 16px;
+}
+.aviso-privacidad p {
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
 @media (max-width: 1100px) {
     .barra-lateral {
         width: 195px;

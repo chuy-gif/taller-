@@ -13,14 +13,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (botonMenu && menu && fondoMenu) {
         botonMenu.addEventListener("click", function () {
-            cambiarMenu(!menu.classList.contains("abierta"));
+            const abrir = !menu.classList.contains("abierta");
+            cambiarMenu(abrir);
+            if (abrir) menu.querySelector("nav a")?.focus();
         });
         fondoMenu.addEventListener("click", function () {
             cambiarMenu(false);
             botonMenu.focus();
         });
         document.addEventListener("keydown", function (evento) {
-            if (evento.key === "Escape") cambiarMenu(false);
+            if (evento.key === "Escape" && menu.classList.contains("abierta")) {
+                cambiarMenu(false);
+                botonMenu.focus();
+            }
         });
     }
 

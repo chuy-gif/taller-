@@ -10,6 +10,7 @@ use App\Http\Controllers\VentaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect()->route('dashboard'));
+Route::view('/privacidad', 'privacidad')->name('privacidad');
 
 // Actividad 10: registro e inicio de sesión.
 Route::middleware('guest')->group(function () {

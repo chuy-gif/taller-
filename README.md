@@ -1,6 +1,6 @@
 # Nexo CRM para Dulce Rincón
 
-Aplicación académica de las actividades 10 y 11: usuarios, clientes, contactos, ventas y actividades dentro de un dashboard. Está desarrollada con PHP y Laravel, vistas Blade, CSS y JavaScript.
+Aplicación académica de las actividades 10 y 11: usuarios, clientes, contactos, ventas y actividades dentro de un dashboard. Está desarrollada con PHP y Laravel, vistas Blade, CSS y JavaScript. La [evidencia de las actividades 13, 14 y 16](documentacion/05-ACTIVIDADES-13-14-16.md) incluye las pruebas, el manual, los avisos y la evaluación.
 
 **La base de datos local ya funciona con SQLite.** La configuración de ejemplo para PostgreSQL está incluida, pero la conexión a ese servidor todavía debe configurarse y probarse.
 
@@ -45,7 +45,7 @@ git clone https://github.com/chuy-gif/taller-.git
 cd taller-
 ```
 
-El repositorio es privado: debes autenticarte con una cuenta de GitHub que tenga acceso.
+El repositorio es público. Para subir cambios necesitas permisos de escritura.
 
 Si los módulos todavía están en la rama `actividades-10-11`, selecciónala:
 
@@ -123,7 +123,13 @@ Después de instalar las dependencias:
 php vendor/bin/phpunit
 ```
 
-La suite incluye **18 pruebas**, que en la validación de esta entrega completaron **122 comprobaciones**. Comprueba acceso, registro, clientes, contactos, ventas, actividades, indicadores, aislamiento entre negocios y controles de seguridad. Las pruebas utilizan una base SQLite temporal en memoria.
+La suite incluye **22 pruebas**, que en la validación de esta entrega completaron **149 comprobaciones**. Comprueba acceso, registro, clientes, contactos, ventas, actividades, indicadores, avisos de privacidad, aislamiento entre negocios y controles de seguridad. Las pruebas utilizan una base SQLite temporal en memoria.
+
+Para repetir la medición local del tablero con mil ventas adicionales:
+
+```powershell
+php vendor/bin/phpunit tests/Benchmark/DashboardBenchmarkTest.php
+```
 
 ## 8. Usar PostgreSQL en una siguiente etapa
 

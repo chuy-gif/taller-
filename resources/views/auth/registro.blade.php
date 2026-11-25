@@ -52,6 +52,7 @@
             autocomplete="new-password"
         />
     </label>
+    <p class="nota">La demostración utiliza datos ficticios. <a class="enlace" href="{{ route('privacidad') }}">Consulta el aviso de privacidad</a> antes de crear tu cuenta.</p>
     <button class="boton" type="submit">Crear mi cuenta</button>
 </form>
 <p class="ayuda-acceso">

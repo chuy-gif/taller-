@@ -9,9 +9,9 @@
 @section('contenido')
 <section class="bienvenida">
     <div>
-        <h2>{{ $entregas->count() }} entregas para hoy</h2>
+        <h2>{{ $entregas->total() }} entregas para hoy</h2>
         <p>
-            {{ $frias->count() }} cotizaciones necesitan seguimiento. Revisa también tus actividades
+            {{ $frias->total() }} cotizaciones necesitan seguimiento. Revisa también tus actividades
             pendientes.
         </p>
     </div>
@@ -20,12 +20,12 @@
 <section class="indicadores" aria-label="Indicadores del negocio">
     <article>
         <p>Entregas de hoy</p>
-        <strong>{{ $entregas->count() }}</strong>
+        <strong>{{ $entregas->total() }}</strong>
         <small>Pedidos abiertos para hoy</small>
     </article>
     <article>
         <p>Cotizaciones frías</p>
-        <strong>{{ $frias->count() }}</strong>
+        <strong>{{ $frias->total() }}</strong>
         <small>Más de 7 días sin actividad ni anticipo</small>
     </article>
     <article>
@@ -90,6 +90,7 @@
                 </tbody>
             </table>
         </div>
+        {{ $entregas->links('partials.paginacion', ['etiqueta' => 'Páginas de entregas de hoy']) }}
         <header class="panel-titulo separador"><h2>Embudo de ventas abiertas</h2></header>
         <div class="resumen-embudo">
             @foreach(\App\Models\Venta::ETAPAS as $clave => $nombre)
@@ -124,6 +125,7 @@
         @empty
         <p class="vacio">Tus cotizaciones están al día.</p>
         @endforelse
+        {{ $frias->links('partials.paginacion', ['etiqueta' => 'Páginas de cotizaciones por retomar']) }}
     </section>
 </div>
 @endsection

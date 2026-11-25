@@ -30,7 +30,8 @@
         </label>
         <label class="completo">
             Alergias e indicaciones
-            <textarea name="alergias" maxlength="1000">{{ old('alergias', $cliente->alergias) }}</textarea>
+            <textarea name="alergias" maxlength="1000" aria-describedby="nota-alergias">{{ old('alergias', $cliente->alergias) }}</textarea>
+            <small class="nota" id="nota-alergias">En esta demostración, escribe únicamente ejemplos ficticios. <a class="enlace" href="{{ route('privacidad') }}#aviso-integral">Consulta el aviso integral</a>.</small>
         </label>
         <label class="completo">
             Notas

@@ -58,7 +58,7 @@
                     </span>
                     <span class="insignia">Base de datos conectada</span>
                 </header>
-                <main id="contenido" class="contenido">
+                <main id="contenido" class="contenido" tabindex="-1">
                     <header class="encabezado">
                         <div>
                             <p class="sobre-titulo">NEXO / {{ auth()->user()->negocio->nombre }}</p>
@@ -74,7 +74,7 @@
                     @yield('contenido')
                     <footer class="pie">
                         Nexo · CRM para emprendedores
-                        <span>Actividades 10 y 11</span>
+                        <a class="enlace" href="{{ route('privacidad') }}">Aviso de privacidad</a>
                     </footer>
                 </main>
             </div>

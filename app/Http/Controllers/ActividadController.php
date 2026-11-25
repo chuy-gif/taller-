@@ -72,13 +72,19 @@ class ActividadController extends CrmController
         abort_unless($request->user()->puedeGestionar() || $request->user()->esCocina(), 403);
         $actividad = $this->actividadesVisibles($request)->findOrFail($actividad);
         abort_if($actividad->tipo === 'Sistema', 403);
-        DB::transaction(function () use ($actividad) {
-            $actividad->update(['completada' => true]);
-            if ($actividad->venta && $actividad->venta->estado === 'abierta') {
-                $actividad->venta->update(['ultima_actividad' => now()]);
+        $completada = DB::transaction(function () use ($request, $actividad) {
+            $cambiadas = $this->actividadesVisibles($request)->whereKey($actividad->id)
+                ->where('completada', false)->update(['completada' => true]);
+
+            if ($cambiadas && $actividad->venta_id !== null) {
+                $fecha = now();
+                $actividad->venta()->where('estado', 'abierta')->where('ultima_actividad', '<', $fecha)
+                    ->update(['ultima_actividad' => $fecha]);
             }
+
+            return $cambiadas > 0;
         });
 
-        return back()->with('exito', 'Actividad marcada como completada.');
+        return back()->with('exito', $completada ? 'Actividad marcada como completada.' : 'La actividad ya estaba completada.');
     }
 }
