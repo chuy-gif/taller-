@@ -45,6 +45,22 @@ El HTML fue aproximadamente 96 % más pequeño en este escenario. La medición c
 
 **Cómo repetir las pruebas.** Desde la carpeta donde está `artisan`, con las dependencias instaladas, ejecuta `php vendor/bin/phpunit`. Para la medición del tablero usa `php vendor/bin/phpunit tests/Benchmark/DashboardBenchmarkTest.php`. El archivo `tests/Feature/ModulosCrmTest.php` contiene los casos funcionales.
 
+### Prueba de carga HTTP
+
+El script inicia sesión con la cuenta de demostración y envía solicitudes GET al CRM local. Ejecuta tres niveles con hasta 1, 5 y 10 peticiones en paralelo. En cada nivel envía 20 peticiones al **Tablero** (`/dashboard`), 20 a **Clientes** (`/clientes`), 20 a **Ventas y pedidos** (`/ventas`) y 20 a **Actividades** (`/actividades`). Son 80 peticiones por nivel y 240 por corrida.
+
+Una respuesta cuenta como correcta si devuelve HTTP 200, contiene HTML y termina de descargarse en un máximo de 10 segundos. Se registra el tiempo de cada petición desde el envío hasta la descarga completa. La mediana (p50) muestra el tiempo central de las respuestas correctas y el p95 indica dentro de qué tiempo terminó aproximadamente el 95 % de ellas.
+
+| En paralelo | Correctas | p50 (ms) | p95 (ms) | Máx. (ms) | Respuestas/s |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | 80/80 | 58.88 | 105.36 | 261.51 | 14.5 |
+| 5 | 80/80 | 299.42 | 380.57 | 481.63 | 16.2 |
+| 10 | 80/80 | 635.48 | 774.58 | 792.41 | 15.3 |
+
+En la primera corrida respondieron correctamente las **240 solicitudes**. Al subir de 1 a 10 en paralelo, el p95 pasó de **105.36 a 774.58 ms** y el servidor mantuvo entre **14.5 y 16.2 respuestas correctas por segundo**. Al repetir la prueba pasaron las 240 solicitudes y el p95 fue de 94.53, 371.96 y 797.50 ms, respectivamente. Las cifras corresponden al servidor de desarrollo local con una sola sesión autenticada.
+
+**Cómo repetir la carga.** Con Nexo encendido en `127.0.0.1:8000`, abre otra terminal en la carpeta del proyecto y ejecuta `node scripts/prueba-http.mjs | Tee-Object evidencia-carga.txt`.
+
 ## Actividad 14 Documentación del sistema
 
 ### Manual de usuario
@@ -96,7 +112,7 @@ Escala de 1 a 5, donde 5 indica que se alcanzó el criterio con evidencia verifi
 | Criterio | Puntaje | Evidencia y oportunidad de mejora |
 | --- | ---: | --- |
 | Pruebas y correcciones | 5/5 | Las dos fallas se reprodujeron y la suite final pasó. |
-| Rendimiento y facilidad de uso | 4/5 | Bajó la carga del tablero. Falta repetir la medición con usuarios concurrentes. |
+| Rendimiento y facilidad de uso | 4/5 | Bajó la carga del tablero y se midió con hasta 10 peticiones simultáneas. Queda por probar con sesiones de usuarios independientes. |
 | Documentación | 4/5 | El manual, la guía de colaboración y ambos avisos están disponibles. El negocio debe definir sus datos de contacto y operación real. |
 | Seguimiento del trabajo | 4/5 | Los cambios se pueden revisar en Git. La revisión por otro integrante queda por registrar. |
 
