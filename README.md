@@ -131,6 +131,24 @@ Para repetir la medición local del tablero con mil ventas adicionales:
 php vendor/bin/phpunit tests/Benchmark/DashboardBenchmarkTest.php
 ```
 
+### Prueba de carga HTTP
+
+Con los datos de demostración cargados y el servidor local encendido en `127.0.0.1:8000`, abre otra terminal en la carpeta del proyecto. Para esta prueba se requiere Node.js 22 o posterior.
+
+```powershell
+node scripts/prueba-http.mjs
+```
+
+El script inicia sesión una vez y envía 80 peticiones por nivel al tablero, clientes, ventas y actividades. Usa niveles de 1, 5 y 10 solicitudes simultáneas. La tabla muestra respuestas correctas, fallas y latencias por ruta. p50 es la mediana y p95 es el tiempo dentro del cual terminó aproximadamente el 95 % de las respuestas correctas. El tiempo cubre la descarga del HTML.
+
+Para aumentar la carga del tablero en la demostración local y capturar la salida:
+
+```powershell
+node scripts/prueba-http.mjs --ruta /dashboard --niveles 1,5,10,20,40 --peticiones 120 | Tee-Object evidencia-carga.txt
+```
+
+Usa `--puerto` si el servidor cambió de puerto. Si cambiaste las credenciales de la cuenta de demostración, configura `NEXO_PRUEBA_CORREO` y `NEXO_PRUEBA_PASSWORD` en la terminal. El servidor de desarrollo de PHP en Windows atiende las solicitudes en un solo proceso. Lee los resultados como una medición de tu entorno local.
+
 ## 8. Usar PostgreSQL en una siguiente etapa
 
 Solo necesitas estos programas si vas a cambiar a ese motor:
