@@ -1,0 +1,58 @@
+CÓMO LEER EL CÓDIGO DE NEXO
+
+Ejemplo: guardar un cliente.
+
+1. La pantalla está en resources/views/clientes/formulario.blade.php.
+   Es HTML con instrucciones Blade para mostrar datos de PHP.
+   @csrf agrega un token para comprobar el envío del formulario.
+
+2. El formulario envía una petición POST a /clientes.
+   routes/web.php relaciona esa dirección con ClienteController::store.
+
+3. store comprueba el rol y llama a validar.
+   Las reglas indican cuáles campos son obligatorios y su tamaño permitido.
+   Si hay errores, Laravel vuelve al formulario con un mensaje.
+
+4. Cliente::create guarda el registro usando el modelo Cliente.
+   El negocio y responsable se toman de la sesión, no del formulario.
+   Eloquent genera la consulta con parámetros para la base de datos.
+
+5. El controlador redirige a la ficha del cliente recién creado.
+   La información se lee de la base y se muestra con {{ }} para escapar HTML.
+
+PALABRAS QUE APARECEN EN LOS ARCHIVOS
+- Route: relaciona una dirección con una función.
+- Request: contiene lo que llegó desde el formulario.
+- validate: comprueba los datos antes de guardarlos.
+- Model: representa una tabla de la base de datos.
+- Controller: procesa una acción o prepara una pantalla.
+- view: indica qué pantalla HTML se va a mostrar.
+- redirect: abre otra dirección después de una operación.
+- middleware: comprobación que se ejecuta antes de entrar a una ruta.
+- migration: instrucciones para crear o modificar las tablas.
+- seeder: carga datos ficticios para practicar.
+- vendor: dependencias de Laravel descargadas con Composer.
+
+ARCHIVOS DE UNA MISMA FUNCIONALIDAD
+Clientes: ClienteController.php + Cliente.php + views/clientes/.
+Contactos: ContactoController.php + Contacto.php + views/contactos/.
+Ventas: VentaController.php + Venta.php + views/ventas/.
+Actividades: ActividadController.php + Actividad.php + views/actividades/.
+Acceso: AccesoController.php + User.php + views/auth/.
+
+El archivo CrmController.php reúne las consultas que filtran por negocio y rol.
+No hace falta seguir un archivo gigante de JavaScript para encontrar una pantalla.
+interfaz.js ayuda con detalles visuales; no decide quién tiene permiso de guardar.
+
+CAMBIOS RESPECTO A LA PRIMERA MAQUETA
+La primera maqueta usaba HTML, CSS y JavaScript con localStorage.
+Esta entrega usa Laravel, vistas Blade y registros SQL persistentes.
+La entidad Venta representa el pedido de la pastelería dentro del embudo comercial.
+Se agregan Contacto y Negocio para cubrir la actividad y separar los equipos.
+
+REFERENCIAS OFICIALES PARA REPASAR
+https://laravel.com/docs/13.x/installation
+https://laravel.com/docs/13.x/authentication
+https://laravel.com/docs/13.x/validation
+https://laravel.com/docs/13.x/authorization
+https://laravel.com/docs/13.x/csrf

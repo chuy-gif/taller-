@@ -1,0 +1,62 @@
+BASE DE DATOS Y SEGURIDAD BÁSICA
+
+BASE LOCAL
+SQLite usa SQL y guarda los datos en database/database.sqlite.
+Ese archivo no se sube al repositorio porque contiene los datos de cada equipo.
+Las sesiones también se guardan en el servidor, no en localStorage.
+
+ENTIDADES PRINCIPALES
+negocios: espacio de trabajo.
+users: usuarios, hash de contraseña, rol y acceso activo.
+clientes: datos del comprador y alergias.
+contactos: personas de contacto de un cliente.
+ventas: oportunidad/pedido, etapas, monto, anticipo y fecha de entrega.
+actividades: conversaciones, tareas y movimientos del historial.
+
+CLIENTE Y CONTACTO SON DISTINTOS
+Ejemplo: Oficina Central es el cliente; Daniel Soto es su persona de contacto.
+El pedido pertenece al cliente y conserva las actividades de seguimiento.
+
+PASAR A POSTGRESQL
+1. Crea una base nueva, por ejemplo nexo_dev, y un usuario con acceso a ella.
+2. Habilita pdo_pgsql en el PHP que uses.
+3. Sustituye las variables DB_ de .env por las de .env.postgresql.example.
+4. Configura tus credenciales locales y ejecuta php artisan config:clear.
+5. Ejecuta php artisan migrate para crear las tablas de Nexo en la base nueva.
+6. Si quieres ejemplos, ejecuta php artisan db:seed en entorno local.
+
+Las migraciones usan tipos y relaciones de Laravel compatibles con ambos motores.
+La ejecución de esta entrega se probó con SQLite. La conexión real a un servidor
+PostgreSQL no se ha probado aquí. Cambiar .env no copia los registros que ya
+existían en SQLite; una transferencia de datos requeriría una migración aparte.
+
+CONTROLES IMPLEMENTADOS
+- Contraseña de al menos 10 caracteres con letras y números.
+- Correo único y contraseña confirmada al registrar usuarios.
+- Hash de contraseña; nunca contraseña legible en la base.
+- Regeneración de sesión al entrar y al registrarse.
+- Logout invalida la sesión y renueva el token CSRF.
+- Cookies de sesión HttpOnly y SameSite=Lax.
+- Sesiones cifradas en el servidor.
+- Límite de intentos de login y de registro.
+- Validación en el servidor y reglas de monto/anticipo.
+- Rutas privadas y cuenta activa comprobada en cada petición.
+- Consultas limitadas al negocio autenticado, también al cambiar ids en URLs.
+- Restricción de cocina a las ventas que le fueron asignadas.
+- Escapado de texto en las vistas para evitar ejecutar HTML ingresado.
+- Formularios con protección CSRF y cabeceras de seguridad.
+- .gitignore excluye .env, bases locales, sesiones y registros de ejecución.
+
+PERMISOS
+Administradora: gestión y acceso a Mi equipo.
+Mostrador: clientes, contactos, ventas y actividades.
+Cocina: consulta asignada y registro de actividades; sin cambiar montos o etapas.
+Consulta: lectura de dashboard, contactos y fichas; sin captura ni gestión de equipo.
+
+USO FUERA DE LA COMPUTADORA LOCAL
+El servidor de desarrollo no es un despliegue de producción.
+Para alojarlo, usa un servicio que ejecute PHP, sirve la carpeta public/,
+configura HTTPS, APP_ENV=production, APP_DEBUG=false y SESSION_SECURE_COOKIE=true.
+Genera una clave de aplicación propia y mantén respaldos de la base.
+El seeder de cuentas conocidas está bloqueado fuera de local y testing.
+No incluye verificación de correo, recuperación por correo ni doble factor.
