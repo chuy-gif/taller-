@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: taller-actividades-10-11
+    runtime: docker
+    plan: free
+    branch: actividades-10-11
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /up
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        sync: false
+      - key: APP_LOCALE
+        value: es
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_URL
+        fromDatabase:
+          name: taller-actividades-db
+          property: connectionString
+      - key: SESSION_DRIVER
+        value: database
+      - key: SESSION_SECURE_COOKIE
+        value: "true"
+      - key: CACHE_STORE
+        value: database
+      - key: LOG_CHANNEL
+        value: stderr
+
+databases:
+  - name: taller-actividades-db
+    databaseName: nexo_crm
+    user: nexo_crm
+    plan: free

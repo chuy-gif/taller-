@@ -162,9 +162,22 @@ Las contraseñas se guardan con hash. Se utilizan sesiones, validación en el se
 
 El `.gitignore` excluye `.env`, la base local, sesiones, registros de ejecución y las dependencias de `vendor/`. Sí se comparten `composer.json`, `composer.lock`, los ejemplos de configuración y las migraciones para que cada integrante pueda instalar su propia copia.
 
-Esta es una aplicación de desarrollo local. Para publicarla como sistema real se necesita un alojamiento compatible con PHP, HTTPS y respaldos. No incluye recuperación de contraseña por correo, verificación de correo ni doble factor.
+## 11. Despliegue público de prueba
 
-## 11. Problemas comunes
+El repositorio incluye `Dockerfile` y `render.yaml` para desplegar esta aplicación Laravel en [Render](https://render.com/) con PHP y PostgreSQL. Cloudflare Workers no ejecuta directamente esta aplicación PHP.
+
+1. Sube la rama `actividades-10-11` a GitHub.
+2. En Render, crea un **Blueprint** y conecta `chuy-gif/taller-`, rama `actividades-10-11`.
+3. Revisa los servicios propuestos y confirma la creación. Render construirá la aplicación y la base de datos; el contenedor ejecuta las migraciones al iniciar.
+4. Cuando el servicio indique **Live**, abre su URL pública `onrender.com` y crea tu cuenta desde **Crear cuenta**. Las cuentas ficticias del seeder están deshabilitadas fuera de local y pruebas.
+
+La configuración inicial usa los planes gratuitos de Render, adecuados para una demostración, no para producción: el servicio puede tardar cerca de un minuto en despertar tras estar inactivo y la base de datos gratuita expira a los 30 días. No uses esta base para datos importantes; para mantener la aplicación o sus datos después, cambia a servicios con almacenamiento y respaldos persistentes. Los datos de la base local SQLite no se copian al crear el servicio.
+
+Cuando Render solicite `APP_KEY`, genera una clave en una terminal local con `php -r "echo 'base64:'.base64_encode(random_bytes(32)), PHP_EOL;"` y pega el resultado solo en el formulario de Render. No subas `.env`, contraseñas ni claves al repositorio.
+
+Esta aplicación no incluye recuperación de contraseña por correo, verificación de correo ni doble factor.
+
+## 12. Problemas comunes
 
 - **La terminal no reconoce PHP o Composer:** revisa su instalación y el PATH; cierra y vuelve a abrir PowerShell.
 - **`could not find driver`:** habilita `pdo_sqlite` en el `php.ini` que muestra `php --ini` para la configuración local.
